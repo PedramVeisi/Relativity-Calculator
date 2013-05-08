@@ -1,0 +1,9 @@
+Relativity Calculator Version 1.0
+
+A simple python script to calculate Lorentz Factor from relative speed is given and relative speed from Lorentz Factor.
+More information: http://en.wikipedia.org/wiki/Lorentz_factor
+
+I'm new to relativity. So, there me new features added to this script.
+
+How to Use:
+Just run relativity_calculator.py: python3 relativity_calculator.py
