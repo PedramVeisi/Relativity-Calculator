@@ -9,7 +9,8 @@ Currently, I'm learning relativity. So, I may add new features to this script in
 
 How to Use:
 
-Just run relativity_calculator.py: python3 relativity_calculator.py
+Just download the project using the ZIP button above and run relativity_calculator.py:
+python3 relativity_calculator.py
 OR
 python relativity_calculator.py
 
