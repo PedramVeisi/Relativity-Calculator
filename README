@@ -11,7 +11,5 @@ How to Use:
 
 Just download the project using the ZIP button above and run relativity_calculator.py:
 python3 relativity_calculator.py
-OR
-python relativity_calculator.py
 
 If you don't have python installed, get it form the official website: http://www.python.org/getit/
