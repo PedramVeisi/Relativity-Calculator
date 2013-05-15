@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Relativity Calculator Version 1.0
+Relativity Calculator Version 1.1
 
 A simple python script to calculate Lorentz Factor from relative speed is given and relative speed from Lorentz Factor.
 More information: http://en.wikipedia.org/wiki/Lorentz_factor
@@ -33,21 +33,22 @@ class RelativityCalculator( ):
 
     #Speed of lingt (m / s)
     c = 3 * (10 ** 8)
-
+    
     def speed_to_gamma(self, v):
         '''(float) > float
 
         Claculate Lorentz Factor. v is relative speed.
 
-        Precondition: v <= c (speed of light)
+        Precondition: v < c (speed of light)
 
-        >>>speed_to_gamma(0)
+        >>> rc = RelativityCalculator()
+        >>> rc.speed_to_gamma(0)
         1.0
-        >>>speed_to_gamma(3000000)
+        >>> rc.speed_to_gamma(3000000)
         1.0000500037503126
-        >>>speed_to_gamma(297000000)
+        >>> rc.speed_to_gamma(297000000)
         7.088812050083354
-        >>>speed_to_gamma(300000000)
+        >>> rc.speed_to_gamma(300000000)
         -1
         '''
 
@@ -65,11 +66,12 @@ class RelativityCalculator( ):
 
         Precondition: gamma >= 1
 
-        >>>gamma_to_speed(0)
-        0.0
-        >>>gamma_to_speed(1.5)
+        >>> rc = RelativityCalculator()
+        >>> rc.gamma_to_speed(0)
+        -1
+        >>> rc.gamma_to_speed(1.5)
         223606797.74997896
-        >>>gamma_to_speed(10)
+        >>> rc.gamma_to_speed(10)
         298496231.13198596
         '''
 
@@ -81,37 +83,94 @@ class RelativityCalculator( ):
         return v
 
 
+    def lorentz_location_transformation(self, v, x_r, t_r):
+        '''(float, float, float) -> float
+        
+        Return Lorentz location transformation(in light-seconds).
+        
+        Inputs:
+        v  -> Relative speed (A fraction of c. i.e 0.1 means 0.1c)
+        x_r -> Rocket location (light-seconds)
+        t_r -> Rocket time (seconds)
+        
+        >>> rc = RelativityCalculator()
+        >>> rc.lorentz_location_transformation(30000000, 0, 10)
+        1.005037815259212
+        >>> rc.lorentz_location_transformation(30000000, 0, 20)
+        2.010075630518424
+        '''
+        
+        #Function requires a fraction of c.
+        fraction_speed = v / self.c
+        
+        gamma = self.speed_to_gamma(fraction_speed * self.c)
+        x_l = gamma * ( x_r + fraction_speed * t_r  )
+        return x_l
+
+
+    def lorentz_time_transformation(self, v, x_r, t_r):
+        '''(float, float, float) -> float
+        
+        Return Lorentz time transformation(in seconds).
+        
+        Inputs:
+        v  -> Relative speed (A fraction of c. i.e 0.1 means 0.1c)
+        x_r -> Rocket location (light-seconds)
+        t_r -> Rocket time (seconds)
+        
+        >>> rc = RelativityCalculator()
+        >>> rc.lorentz_time_transformation(30000000, 0, 10)
+        10.05037815259212
+        >>> rc.lorentz_time_transformation(30000000, 0, 20)
+        20.10075630518424
+        '''
+        
+        #Function requires a fraction of c.
+        fraction_speed = v / self.c
+        
+        gamma = self.speed_to_gamma(fraction_speed * self.c)
+        t_l = gamma * (t_r + (fraction_speed * x_r))
+        return t_l
+
+
 class Main():
 
     #Speed of lingt (m / s)
     c = 3 * (10 ** 8)
 
     def __init__(self):
+    
+        self.VERSION_NUMBER = 1.1
+    
+        self.SPEED_TO_GAMMA = 1
+        self.GAMMA_TO_SPEED = 2
+        self.LORENTZ_TRANSFORMATION = 3
+        self.EXIT = 4
 
         self.rc = RelativityCalculator()
-        print("\nWelcome to Relativity Calculater 1.0\n")
+        print("\nWelcome to Relativity Calculater " + str(self.VERSION_NUMBER) + "\n")
 
         while(True):
-            print("1. Compute Lorentz Factor from relative speed")
-            print("2. Compute relative speed from Lorentz Factor")
-            print("3. Exit")
+            print(str(self.SPEED_TO_GAMMA) + ". Compute Lorentz Factor from relative speed")
+            print(str(self.GAMMA_TO_SPEED) + ". Compute relative speed from Lorentz Factor")
+            print(str(self.LORENTZ_TRANSFORMATION) + ". Calculate Lorentz Transformation (Lab time and location from Rocket conditions.)")
+            print(str(self.EXIT) + ". Exit")
             print("")
             user_input = input("Enter Command Number: ")
 
             try:
                 command_number = int(user_input)
 
-                if (command_number == 1):
-                    print("You have to options for providing relative speed: km/s or relative to c (For example: 0.5c)")
-                    speed_input = input("Enter relative speed: ")
-                    gamma = self.speed_to_gamma_handler(speed_input)
+                if (command_number == self.SPEED_TO_GAMMA):
+                    speed = self.speed_input_handler()
+                    gamma = self.rc.speed_to_gamma(speed)
 
                     if (gamma == -1):
                         print("\nInvalid speed. Relative speed must be a number and cannot be greater than c (300000 km/s).\n")
                     else:
                         print("\nLorentz Factor is: {0}\n".format(gamma))
 
-                elif (command_number == 2):
+                elif (command_number == self.GAMMA_TO_SPEED):
                     gamma_input = input("Enter Lorentz Factor (>= 1): ")
                     speed = self.gamma_to_speed_handler(gamma_input)
 
@@ -119,20 +178,53 @@ class Main():
                         print("\nInvalid Lorentz Factor.It must be greater than or equal to 1.\n")
                     else:
                         print("\nRelative Speed is: {0:.4f} m/s = {1:.4f} km/s = {2:.10f}c\n".format(speed, speed / 1000, speed / self.c))
-                elif (command_number == 3):
+                        
+                elif (command_number == self.LORENTZ_TRANSFORMATION):
+
+                    self.lorentz_transformation_handler()
+                                        
+                elif (command_number == self.EXIT):
                     print("Bye!")
                     break
+                    
                 else:
                     print("\nInvalid command! Enter command Number (1, 2, ...).")
             except ValueError:
-                print("Enter a number. For example if you want to exit enter 3.")
+                print("Enter a number. For example if you want to exit enter " + str(self.EXIT) + ".\n")
 
-    def speed_to_gamma_handler(self, user_speed):
-        '''(float) -> float
+    
+    def lorentz_transformation_handler(self):
+        '''(NoneType) -> NoneType
+        
+        Handles Lorentz Transformation.
+        
+        '''
+    
+        speed = self.speed_input_handler()
+        
+        x_r_input = input("Rocket location (light-seconds): ")
+        t_r_input = input("Rocket time (seconds): ")
+        
+        x_r = float(x_r_input)
+        t_r = float(t_r_input)
+        
+        x_l = self.rc.lorentz_location_transformation(speed, x_r, t_r)
+        t_l = self.rc.lorentz_time_transformation(speed, x_r, t_r)
+
+        print()
+        print("Lab Location is: {0:.2f} and Lab Time is {1:.2f}\n".format(x_l, t_l))
+    
+    
+    def speed_input_handler(self):
+        '''(NoneType) -> float
 
         Check speed and call speed_to_gamma form Relativity Calculator if it's valid.
 
         '''
+        
+        print("You have to options for providing relative speed: km/s or relative to c (For example: 0.5c)")
+        user_speed = input("Enter relative speed: ")
+        
         try:
             if (user_speed[-1] == 'c'):
                 speed = float(user_speed[:-1]) * self.c
@@ -140,8 +232,7 @@ class Main():
                 #convert user input from km/s to m/s
                 speed = float(user_speed) * 1000
 
-            gamma = self.rc.speed_to_gamma(speed)
-            return gamma
+            return speed
 
         except ValueError:
             return -1
@@ -162,3 +253,4 @@ class Main():
 
 if __name__ == "__main__":
     Main()
+

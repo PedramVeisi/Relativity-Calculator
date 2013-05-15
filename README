@@ -1,6 +1,6 @@
-Relativity Calculator Version 1.0
+Relativity Calculator Version 1.1
 
-A simple python script to calculate Lorentz Factor from relative speed and relative speed from Lorentz Factor.
+A simple python script to calculate Lorentz Factor from relative speed, relative speed from Lorentz Factor and Lorentz Transformation.
 More information: http://en.wikipedia.org/wiki/Lorentz_factor
 
 Special thanks to Prof. Larry Randles Lagerstrom and Coursera for this great course: https://www.coursera.org/course/einstein

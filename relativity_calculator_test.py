@@ -22,7 +22,7 @@ class TestGammaToVelocity(unittest.TestCase):
         self.assertAlmostEqual(actual, expected)
 
 class TestSpeedToGamma(unittest.TestCase):
-    '''Test for spped_to_gamma function'''
+    '''Test for speed_to_gamma function'''
 
     def test_speed_to_gamma_1(self):
         actual = rc.speed_to_gamma(0)
@@ -43,6 +43,34 @@ class TestSpeedToGamma(unittest.TestCase):
         actual = rc.speed_to_gamma(300000000)
         expected = -1
         self.assertAlmostEqual(actual, expected)
+        
+        
+class TestLorentzLocationTransformation(unittest.TestCase):
+    '''Test for lorentz_location_transformation function'''
+
+    def test_lorentz_location_transformation_1(self):
+        actual = rc.lorentz_location_transformation(30000000, 0, 10)
+        expected = 1.005037815259212
+        self.assertAlmostEqual(actual, expected)        
+
+    def test_lorentz_location_transformation_2(self):
+        actual = rc.lorentz_location_transformation(30000000, 0, 20)
+        expected = 2.010075630518424
+        self.assertAlmostEqual(actual, expected)        
+
+
+class TestLorentzTimeTransformation(unittest.TestCase):
+    '''Test for lorentz_time_transformation function'''
+
+    def test_lorentz_time_transformation_1(self):
+        actual = rc.lorentz_time_transformation(30000000, 0, 10)
+        expected = 10.05037815259212
+        self.assertAlmostEqual(actual, expected)        
+
+    def test_lorentz_time_transformation_2(self):
+        actual = rc.lorentz_time_transformation(30000000, 0, 20)
+        expected = 20.10075630518424
+        self.assertAlmostEqual(actual, expected)   
 
 
 if __name__ == '__main__':
