@@ -8,7 +8,7 @@ More information: http://en.wikipedia.org/wiki/Lorentz_factor
 
 Special thanks to Prof. Larry Randles Lagerstrom and Coursera for this great course: https://www.coursera.org/course/einstein
 
-I'm new to relativity. So, there me new features added to this script.
+I'm new to relativity. I may add new features to this script in the future.
 
 Copyright 2013 (©) Pedram Veisi <pedramveisi@gmail.com>
 
